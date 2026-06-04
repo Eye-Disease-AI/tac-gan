@@ -199,7 +199,7 @@ def save_and_sample(G, D, G_ema, z_, y_, fixed_z, fixed_y,
   # Also save interp sheets
   for fix_z, fix_y in zip([False, False, True], [False, True, False]):
     utils.interp_sheet(which_G,
-                       num_per_sheet=16,
+                       num_per_sheet=4,
                        num_midpoints=8,
                        num_classes=config['n_classes'],
                        parallel=config['parallel'],

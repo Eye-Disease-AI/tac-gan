@@ -13,6 +13,8 @@ import torchvision.transforms as transforms
 from torchvision.datasets.utils import download_url, check_integrity
 import torch.utils.data as data
 from torch.utils.data import DataLoader
+
+from dataset.loader import NuclearCataractDataset
          
 IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm']
 
@@ -342,6 +344,9 @@ class CIFAR10(dset.CIFAR10):
     if self.target_transform is not None:
       target = self.target_transform(target)
 
+    print(type(img))
+    print(type(target))
+
     return img, target
       
   def __len__(self):
@@ -360,3 +365,36 @@ class CIFAR100(CIFAR10):
     test_list = [
         ['test', 'f0ef6b0ae62326f3e7ffdfab6717acfc'],
     ]
+
+class NuclearCataract:
+  def __init__(
+        self,
+        root,
+        train=True,
+        transform=None,
+        target_transform=None,
+        download=True,
+        validate_seed=0,
+        val_split=0,
+        load_in_mem=True,
+        **kwargs,
+    ):
+
+    self.ds = NuclearCataractDataset(
+        NuclearCataractDataset.TrainValMode(0.8, 0.2), cache_size=256,
+    ).train_set()
+
+  def __getitem__(self, index):
+    # We will have to up/down-scale from 224
+    #img = np.random.randn(256, 256, 3)
+    img, target = self.ds[index]
+    img = Image.fromarray(img.permute(1, 2, 0).numpy())
+    t = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.CenterCrop(256),
+    ])
+    img = t(img)
+    return img, target
+
+  def __len__(self):
+    return len(self.ds)

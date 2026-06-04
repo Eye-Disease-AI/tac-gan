@@ -1,0 +1,3 @@
+[submodule "TAC-BigGAN/dataset"]
+	path = TAC-BigGAN/dataset
+	url = git@github.com:Eye-Disease-AI/dataset.git

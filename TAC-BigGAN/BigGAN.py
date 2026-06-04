@@ -389,7 +389,7 @@ class Discriminator(nn.Module):
       index_list = [[], []]
       for i in range(len):
           index_list[0].append(i)
-          index_list[1].append(np.asscalar(y[i].cpu().detach().numpy()))
+          index_list[1].append((y[i].cpu().detach().numpy()).item())
 
       prob_choose = prob[index_list]
       prob_choose = (prob_choose.squeeze()).unsqueeze(dim=1)

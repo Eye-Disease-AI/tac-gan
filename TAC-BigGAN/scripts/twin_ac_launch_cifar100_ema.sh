@@ -4,9 +4,9 @@ CUDA_VISIBLE_DEVICES=0,1 python train.py \
 --loss_type Twin_AC --AC \
 --AC_weight 1.0 \
 --shuffle --batch_size 100 --parallel \
---num_G_accumulations 1 --num_D_accumulations 1 --num_epochs 500 \
+--num_G_accumulations 1 --num_D_accumulations 1 --num_epochs 1 \
 --num_D_steps 2 --num_G_steps 1 --G_lr 2e-4 --D_lr 2e-4 \
---dataset C100 \
+--dataset NuclearCataract \
 --G_ortho 0.0 \
 --G_attn 0 --D_attn 0 \
 --G_init N02 --D_init N02 \
