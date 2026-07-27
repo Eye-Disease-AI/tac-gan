@@ -1,11 +1,11 @@
 [project]
-name = "twin-auxiliary-classifiers-gan"
+name = "tacgan"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "dataset",
+    "dataset @ git+ssh://git@github.com/Eye-Disease-AI/dataset.git@main",
     "h5py>=3.16.0",
     "ipykernel>=7.2.0",
     "matplotlib>=3.10.9",
@@ -17,10 +17,5 @@ dependencies = [
     "tqdm>=4.67.3",
 ]
 
-[tool.uv.workspace]
-members = [
-    "TAC-BigGAN/dataset",
-]
-
-[tool.uv.sources]
-dataset = { workspace = true }
+[tool.uv]
+package = false
