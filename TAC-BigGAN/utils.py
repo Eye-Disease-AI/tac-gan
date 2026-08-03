@@ -387,6 +387,12 @@ def prepare_parser():
 # Arguments for sample.py; not presently used in train.py
 def add_sample_parser(parser):
     parser.add_argument(
+        '--sample_classes', type=int, nargs='+', default=None,
+        help='Class IDs to generate, paired positionally with --sample_seeds')
+    parser.add_argument(
+        '--sample_seeds', type=int, nargs='+', default=None,
+        help='Sampling seeds, paired positionally with --sample_classes')
+    parser.add_argument(
         '--sample_npz', action='store_true', default=False,
         help='Sample "sample_num_npz" images and save to npz? '
              '(default: %(default)s)')
@@ -402,6 +408,10 @@ def add_sample_parser(parser):
         '--sample_interps', action='store_true', default=False,
         help='Produce interpolation sheets and stick them in '
              'the samples root? (default: %(default)s)')
+    parser.add_argument(
+        "--sample_gen", action="store_true", default=False,
+        help="Mode for generating samples for augmentation of training datasets",
+    )
     parser.add_argument(
         '--sample_sheet_folder_num', type=int, default=-1,
         help='Number to use for the folder for these sample sheets '
@@ -767,7 +777,7 @@ def load_weights(G, D, state_dict, weights_root, experiment_name,
                 torch.load('%s/%s.pth' % (root, join_strings('_', ['D_optim', name_suffix]))))
     # Load state dict
     for item in state_dict:
-        state_dict[item] = torch.load('%s/%s.pth' % (root, join_strings('_', ['state_dict', name_suffix])))[item]
+        state_dict[item] = torch.load('%s/%s.pth' % (root, join_strings('_', ['state_dict', name_suffix])), weights_only=False)[item]
     if G_ema is not None:
         G_ema.load_state_dict(
             torch.load('%s/%s.pth' % (root, join_strings('_', ['G_ema', name_suffix]))),

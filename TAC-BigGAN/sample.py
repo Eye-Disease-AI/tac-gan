@@ -2,6 +2,7 @@
    This script loads a pretrained net and a weightsfile and sample '''
 import functools
 import math
+import os
 import numpy as np
 from tqdm import tqdm, trange
 
@@ -117,6 +118,27 @@ def run(config):
                          experiment_name=experiment_name,
                          folder_number=config['sample_sheet_folder_num'],
                          z_=z_,)
+    
+  if config["sample_gen"]:
+    print("Preparing samples in generation mode...")
+    classes, seeds = config['sample_classes'], config['sample_seeds']
+    if classes is None or seeds is None or len(classes) != len(seeds):
+      raise ValueError('--sample_classes and --sample_seeds must have equal lengths')
+    sample_dir = '%s/%s/%d' % (config['samples_root'], experiment_name,
+                                config['sample_sheet_folder_num'])
+    os.makedirs(sample_dir, exist_ok=True)
+    for class_id, seed in zip(classes, seeds):
+      if not 0 <= class_id < config['n_classes']:
+        raise ValueError('Invalid class ID %d' % class_id)
+      utils.seed_rng(seed)
+      z = torch.randn(1, G.dim_z, device=device)
+      y = torch.tensor([class_id], device=device)
+      with torch.no_grad():
+        image = G(z, G.shared(y))
+      torchvision.utils.save_image(
+          image.float(), '%s/class_%d_seed_%d.jpg' % (sample_dir, class_id, seed),
+          normalize=True)
+
   # Sample interp sheets
   if config['sample_interps']:
     print('Preparing interp sheets...')
