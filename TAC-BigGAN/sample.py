@@ -136,8 +136,11 @@ def run(config):
       with torch.no_grad():
         image = G(z, G.shared(y))
       torchvision.utils.save_image(
-          image.float(), '%s/class_%d_seed_%d.jpg' % (sample_dir, class_id, seed),
-          normalize=True)
+          image.float(),
+          '%s/class_%d_seed_%d.jpg' % (sample_dir, class_id, seed),
+          normalize=True,
+          value_range=(-1, 1),
+      )
 
   # Sample interp sheets
   if config['sample_interps']:
