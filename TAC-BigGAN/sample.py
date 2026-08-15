@@ -53,7 +53,8 @@ def run(config):
   utils.seed_rng(config['seed'])
    
   # Setup cudnn.benchmark for free speed
-  torch.backends.cudnn.benchmark = True
+  #torch.backends.cudnn.benchmark = True
+  torch.backends.cudnn.deterministic = True
   
   # Import the model--this line allows us to dynamically select different files.
   model = __import__(config['model'])
